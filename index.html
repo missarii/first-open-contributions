@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FirstOpen — Your First Contribution</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #0a0a0f;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    /* Animated Background Grid */
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0; opacity: 0.15;
+      background-image: 
+        linear-gradient(rgba(0,240,255,0.3) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,240,255,0.3) 1px, transparent 1px);
+      background-size: 60px 60px;
+      animation: gridMove 20s linear infinite;
+    }
+    @keyframes gridMove {
+      0% { transform: translate(0,0); }
+      100% { transform: translate(60px,60px); }
+    }
+
+    /* Floating Orbs */
+    .orb {
+      position: fixed; border-radius: 50%; filter: blur(60px); z-index: 0; pointer-events: none;
+    }
+    .orb-1 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(99,102,241,0.4) 0%, transparent 70%); top: 10%; left: 10%; animation: float 8s ease-in-out infinite; }
+    .orb-2 { width: 250px; height: 250px; background: radial-gradient(circle, rgba(236,72,153,0.3) 0%, transparent 70%); bottom: 20%; right: 15%; animation: float 10s ease-in-out infinite reverse; }
+    @keyframes float {
+      0%,100% { transform: translate(0,0) scale(1); }
+      33% { transform: translate(30px,-30px) scale(1.1); }
+      66% { transform: translate(-20px,20px) scale(0.95); }
+    }
+
+    /* Animations */
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulseGlow {
+      0%,100% { box-shadow: 0 0 20px rgba(99,102,241,0.5); }
+      50% { box-shadow: 0 0 40px rgba(99,102,241,0.8), 0 0 60px rgba(236,72,153,0.4); }
+    }
+    .animate { opacity: 0; animation: slideUp 0.8s ease-out forwards; }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+    .delay-5 { animation-delay: 0.5s; }
+    .delay-6 { animation-delay: 0.6s; }
+
+    /* Glass Card */
+    .glass {
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+    }
+
+    /* Gradient Text */
+    .gradient-text {
+      background: linear-gradient(135deg, #6366f1 0%, #ec4899 50%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Button */
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      border: none; color: white; padding: 16px 40px; border-radius: 16px;
+      font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;
+      position: relative; overflow: hidden; text-decoration: none; display: inline-block;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(99,102,241,0.4); }
+    .btn-primary::before {
+      content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+    .btn-primary:hover::before { left: 100%; }
+
+    .btn-secondary {
+      background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff;
+      padding: 16px 40px; border-radius: 16px; font-size: 1.1rem; font-weight: 600;
+      cursor: pointer; transition: all 0.3s; text-decoration: none; display: inline-block;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.05); }
+
+    /* Code Block */
+    .code-block {
+      background: rgba(0,0,0,0.5); border: 1px solid rgba(99,102,241,0.2);
+      border-radius: 12px; padding: 16px 20px; font-family: 'Fira Code', 'Consolas', monospace;
+      font-size: 0.9rem; color: #a5b4fc; overflow-x: auto; position: relative;
+    }
+    .code-block .comment { color: #6b7280; }
+    .code-block .cmd { color: #34d399; }
+    .code-block .arg { color: #fbbf24; }
+    .copy-btn {
+      position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.1); color: #fff; padding: 6px 12px;
+      border-radius: 8px; font-size: 0.75rem; cursor: pointer; transition: all 0.2s;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,0.2); }
+
+    /* Step Number */
+    .step-num {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #ec4899);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1.2rem; flex-shrink: 0;
+    }
+
+    /* Card Hover */
+    .card-hover { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    .card-hover:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 60px rgba(99,102,241,0.2);
+      border-color: rgba(99,102,241,0.3);
+    }
+
+    /* Layout */
+    .container { max-width: 1400px; margin: 0 auto; padding: 0 40px; position: relative; z-index: 10; }
+    nav { padding: 24px 40px; display: flex; justify-content: space-between; align-items: center; }
+    .nav-links { display: flex; gap: 32px; align-items: center; font-size: 0.95rem; color: #9ca3af; }
+    .nav-links a { color: inherit; text-decoration: none; transition: color 0.2s; }
+    .nav-links a:hover { color: #fff; }
+
+    /* Sections */
+    .hero { text-align: center; padding: 80px 40px 120px; }
+    .hero h1 { font-size: 5rem; font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 24px; }
+    .hero p { font-size: 1.25rem; color: #9ca3af; max-width: 600px; margin: 0 auto 48px; line-height: 1.7; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2);
+      padding: 8px 20px; border-radius: 100px; font-size: 0.85rem; color: #a5b4fc; margin-bottom: 32px;
+    }
+    .badge-dot { width: 8px; height: 8px; background: #34d399; border-radius: 50%; animation: pulseGlow 2s infinite; }
+
+    .stats { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; margin-top: 80px; }
+    .stat { text-align: center; }
+    .stat-value {
+      font-size: 2.5rem; font-weight: 700;
+      background: linear-gradient(135deg, #6366f1, #ec4899);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      font-variant-numeric: tabular-nums;
+    }
+    .stat-label { color: #6b7280; font-size: 0.9rem; margin-top: 4px; }
+
+    .section-title { text-align: center; margin-bottom: 64px; }
+    .section-title h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 16px; }
+    .section-title p { color: #9ca3af; font-size: 1.1rem; }
+
+    .guide { max-width: 1000px; margin: 0 auto; padding: 0 40px 120px; }
+    .step { padding: 32px; margin-bottom: 24px; display: flex; gap: 24px; align-items: flex-start; }
+    .step-content { flex: 1; }
+    .step-content h3 { font-size: 1.3rem; font-weight: 600; margin-bottom: 8px; }
+    .step-content p { color: #9ca3af; margin-bottom: 16px; line-height: 1.6; }
+
+    .community { padding: 0 40px 120px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+    .grid-card { padding: 32px; }
+    .grid-icon {
+      width: 56px; height: 56px; border-radius: 16px;
+      display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+    }
+
+    .cta { max-width: 800px; margin: 0 auto; padding: 0 40px 120px; text-align: center; }
+    .cta-box { padding: 64px 48px; background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(236,72,153,0.1)); }
+
+    footer { border-top: 1px solid rgba(255,255,255,0.05); padding: 40px; text-align: center; color: #6b7280; font-size: 0.9rem; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.5rem; }
+      .step { flex-direction: column; align-items: flex-start; }
+      nav { flex-direction: column; gap: 16px; }
+      .nav-links { flex-wrap: wrap; justify-content: center; }
+      .stats { gap: 24px; }
+      .cta-box { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Effects -->
+  <div class="bg-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <!-- Navigation -->
+  <nav class="container">
+    <div style="display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 1.3rem;">
+      <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #6366f1, #ec4899); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <span class="gradient-text">FirstOpen</span>
+    </div>
+    <div class="nav-links">
+      <a href="#guide">Guide</a>
+      <a href="#community">Community</a>
+      <a href="https://github.com/missarii/first-open-contributions" target="_blank" style="display: flex; align-items: center; gap: 8px; color: #fff; background: rgba(255,255,255,0.05); padding: 10px 20px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        Star on GitHub
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="animate delay-1">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        Welcome to Open Source 2027
+      </div>
+    </div>
+    <h1 class="animate delay-2">Make Your First<br><span class="gradient-text">Contribution</span></h1>
+    <p class="animate delay-3">Join millions of developers worldwide. Your journey into open source starts with a single pull request.</p>
+    <div class="animate delay-4" style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
+      <a href="#guide" class="btn-primary">Start Contributing →</a>
+      <a href="#community" class="btn-secondary">Explore Community</a>
+    </div>
+    <div class="stats animate delay-6">
+      <div class="stat"><div class="stat-value">100M+</div><div class="stat-label">Developers</div></div>
+      <div class="stat"><div class="stat-value">400M+</div><div class="stat-label">Repositories</div></div>
+      <div class="stat"><div class="stat-value">∞</div><div class="stat-label">Possibilities</div></div>
+    </div>
+  </section>
+
+  <!-- Guide -->
+  <section id="guide" class="guide">
+    <div class="section-title animate">
+      <h2>Your <span class="gradient-text">First PR</span> in 5 Steps</h2>
+      <p>From zero to merged — follow this interactive guide</p>
+    </div>
+
+    <div class="animate glass step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h3>Fork the Repository</h3>
+        <p>Click the Fork button on GitHub to create your own copy of the project.</p>
+        <div class="code-block">
+          <span class="comment"># Your forked repo will be at:</span><br>
+          <span class="arg">https://github.com/YOUR_USERNAME/first-open-contributions</span>
+          <button class="copy-btn" onclick="copy(this, 'https://github.com/YOUR_USERNAME/first-open-contributions')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="animate glass step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h3>Clone to Your Machine</h3>
+        <p>Download the repository to your local development environment.</p>
+        <div class="code-block">
+          <span class="cmd">git</span> <span class="arg">clone</span> https://github.com/YOUR_USERNAME/first-open-contributions.git<br>
+          <span class="cmd">cd</span> <span class="arg">first-open-contributions</span>
+          <button class="copy-btn" onclick="copy(this, 'git clone https://github.com/YOUR_USERNAME/first-open-contributions.git\ncd first-open-contributions')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="animate glass step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h3>Create Your Branch</h3>
+        <p>Always work on a new branch — never commit directly to main!</p>
+        <div class="code-block">
+          <span class="cmd">git</span> <span class="arg">checkout</span> -b <span class="arg">feature/my-first-contribution</span>
+          <button class="copy-btn" onclick="copy(this, 'git checkout -b feature/my-first-contribution')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="animate glass step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h3>Make Changes & Commit</h3>
+        <p>Add your contribution, then stage and commit with a meaningful message.</p>
+        <div class="code-block">
+          <span class="comment"># Make your changes to the files...</span><br>
+          <span class="cmd">git</span> <span class="arg">add</span> .<br>
+          <span class="cmd">git</span> <span class="arg">commit</span> -m <span class="arg">"Add my first contribution: welcome page enhancement"</span><br>
+          <span class="cmd">git</span> <span class="arg">push</span> -u origin <span class="arg">feature/my-first-contribution</span>
+          <button class="copy-btn" onclick="copy(this, 'git add .\ngit commit -m &quot;Add my first contribution: welcome page enhancement&quot;\ngit push -u origin feature/my-first-contribution')">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="animate glass step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h3>Open Pull Request</h3>
+        <p>Head back to GitHub, click "Compare & pull request", and submit your PR!</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <span style="background: rgba(52,211,153,0.1); color: #34d399; padding: 6px 16px; border-radius: 100px; font-size: 0.85rem; border: 1px solid rgba(52,211,153,0.2);">✓ Code reviewed</span>
+          <span style="background: rgba(99,102,241,0.1); color: #a5b4fc; padding: 6px 16px; border-radius: 100px; font-size: 0.85rem; border: 1px solid rgba(99,102,241,0.2);">✓ Tests passing</span>
+          <span style="background: rgba(236,72,153,0.1); color: #f472b6; padding: 6px 16px; border-radius: 100px; font-size: 0.85rem; border: 1px solid rgba(236,72,153,0.2);">✓ Merged to main</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Community -->
+  <section id="community" class="community container">
+    <div class="section-title animate">
+      <h2>Why <span class="gradient-text">Contribute?</span></h2>
+      <p>Open source is more than code — it's community, growth, and impact</p>
+    </div>
+    <div class="grid">
+      <div class="animate glass card-hover grid-card">
+        <div class="grid-icon" style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <h3 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 8px;">Build Your Portfolio</h3>
+        <p style="color: #9ca3af; line-height: 1.6;">Every PR is a public testament to your skills. Employers love seeing real-world collaboration.</p>
+      </div>
+      <div class="animate glass card-hover grid-card">
+        <div class="grid-icon" style="background: linear-gradient(135deg, #ec4899, #f43f5e);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 8px;">Join a Community</h3>
+        <p style="color: #9ca3af; line-height: 1.6;">Connect with developers worldwide. Learn from mentors and help newcomers grow.</p>
+      </div>
+      <div class="animate glass card-hover grid-card">
+        <div class="grid-icon" style="background: linear-gradient(135deg, #34d399, #10b981);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </div>
+        <h3 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 8px;">Learn by Doing</h3>
+        <p style="color: #9ca3af; line-height: 1.6;">There's no better teacher than production code. See how the best projects are structured.</p>
+      </div>
+      <div class="animate glass card-hover grid-card">
+        <div class="grid-icon" style="background: linear-gradient(135deg, #fbbf24, #f59e0b);">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+        </div>
+        <h3 style="font-size: 1.2rem; font-weight: 600; margin-bottom: 8px;">Make an Impact</h3>
+        <p style="color: #9ca3af; line-height: 1.6;">Your code could be used by millions. Fix bugs, add features, or improve documentation.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="animate glass cta-box">
+      <h2 style="font-size: 2rem; font-weight: 700; margin-bottom: 16px;">Ready to <span class="gradient-text">Begin?</span></h2>
+      <p style="color: #9ca3af; margin-bottom: 32px; line-height: 1.6;">Your first contribution is just a click away. Fork the repo, make your change, and join the open source revolution.</p>
+      <a href="https://github.com/missarii/first-open-contributions/fork" target="_blank" class="btn-primary">Fork Now & Start Coding 🚀</a>
+      <p style="margin-top: 24px; color: #6b7280; font-size: 0.85rem;">Made with ❤️ for first-time contributors everywhere</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© 2027 FirstOpen Contributions. Licensed under MIT.</p>
+    <p style="margin-top: 8px;">Built for the community, by the community.</p>
+  </footer>
+
+  <script>
+    // Copy to clipboard
+    function copy(btn, text) {
+      navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = 'Copy', 2000);
+      });
+    }
+
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.animationPlayState = 'running';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.animate').forEach(el => {
+      el.style.animationPlayState = 'paused';
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
